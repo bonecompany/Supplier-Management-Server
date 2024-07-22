@@ -8,11 +8,13 @@ dotenv.config({
 })
 
 const port = process.env.PORT || 7777
-
-connectDB().then(()=>{
-    app.listen(port,()=>{
-        console.log(`Server is running on port ${port}`)
-    })
-}).catch((err) => {
-    console.log("connection error on index",err);
+app.listen(port,()=>{
+    console.log(`Server is running on port ${port}`)
 })
+connectDB()
+
+// connectDB().then(()=>{
+  
+// }).catch((err) => { 
+//     console.log("connection error on index",err);
+// })
