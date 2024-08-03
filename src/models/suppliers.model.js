@@ -26,7 +26,7 @@ const supplier_schema = new Schema(
 
         refresh_token: { type: String },
 
-        avatar: { type: String },
+        min_latex : {type:Number},
 
         tappers: [
             {

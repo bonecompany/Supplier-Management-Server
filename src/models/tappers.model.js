@@ -12,7 +12,6 @@ const tappers_schema = new Schema(
 
         refresh_token: { type: String },
 
-        // avatar: { type: String },
 
         suppliers : [
             {
