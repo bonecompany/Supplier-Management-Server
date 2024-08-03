@@ -1,18 +1,21 @@
+import { string } from "joi";
 import mongoose, { Schema } from "mongoose";
 
 const supplier_schema = new Schema(
     {
-        name: { type: String, required: true, index: true },
+        name: { type: String, index: true },
 
-        phone: { type: Number, require: [true, "enter mobile number"] },
+        username: { type: String, unique: true },
 
-        Bone_id: { type: Number, require: true, unique: true },
+        phone: { type: String, require: [true, "enter mobile number"] },
+
+        Bone_id: { type: Number, unique:true },
 
         GST: { type: String },
 
-        state: { type: String, require: true },
+        state: { type: String },
 
-        code: { type: Number, require: true },
+        state_code: { type: Number },
 
         address: { type: String, require: true },
 
@@ -26,7 +29,7 @@ const supplier_schema = new Schema(
 
         refresh_token: { type: String },
 
-        min_latex : {type:Number},
+        min_latex: { type: Number },
 
         tappers: [
             {
@@ -35,10 +38,10 @@ const supplier_schema = new Schema(
             }
         ],
 
-        drivers : [
+        drivers: [
             {
                 type: Schema.Types.ObjectId,
-                ref:"Drivers"
+                ref: "Drivers"
             }
         ]
 
