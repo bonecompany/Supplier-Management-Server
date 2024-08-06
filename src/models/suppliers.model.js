@@ -1,4 +1,3 @@
-import { string } from "joi";
 import mongoose, { Schema } from "mongoose";
 
 const supplier_schema = new Schema(
