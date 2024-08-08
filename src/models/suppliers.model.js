@@ -4,8 +4,6 @@ const supplier_schema = new Schema(
     {
         name: { type: String, index: true },
 
-        username: { type: String, unique: true },
-
         phone: { type: String, require: [true, "enter mobile number"] },
 
         Bone_id: { type: Number, unique:true },
@@ -49,4 +47,4 @@ const supplier_schema = new Schema(
 
 )
 
-export const supplier = mongoose.model("Suppliers", supplier_schema)
+export const supplierModel = mongoose.model("Suppliers", supplier_schema)
