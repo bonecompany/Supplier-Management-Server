@@ -1,9 +1,10 @@
 import { Router } from 'express'; 
 import adminController from '../controllers/admin.controller.js';
 
+const router = Router();
 
-const router = Router()
+router.post("/login", adminController.admin_login);
 
-router.route("/login").post(adminController.admin_login)
 
-export default  router;
+export default router;
+

@@ -14,7 +14,6 @@ const drivers_schema = new Schema(
 
         vehicle_number : {type : String},
 
-        // avatar: { type: String },
 
         suppliers : [
             {

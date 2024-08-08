@@ -1,10 +1,10 @@
 // app
+
 import express from "express"
 import cors from "cors"
 import healthcheckRouter from "./routes/healthcheck.routes.js"
-// import admin_router from "./routes/admin.routes.js"
 import admin from "./routes/admin.routes.js"
-
+import supplier from "./routes/suppliers.routes.js"
 const app = express()
 
 // cors
@@ -21,6 +21,7 @@ app.use(express.static('public'))
 // routes
 app.use ("/api/v1/healtcheck",healthcheckRouter)
 app.use ("/api/admin",admin)
+app.use ("/api/supplier",supplier)
 
 
-export { app } 
+export { app }
