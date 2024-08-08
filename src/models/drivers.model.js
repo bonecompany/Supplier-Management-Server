@@ -12,7 +12,7 @@ const drivers_schema = new Schema(
 
         refresh_token: { type: String },
 
-        vehicle_number : {type : String},
+        vehicle_number : {type : String},   
 
 
         suppliers : [

@@ -1,5 +1,4 @@
 // app
-
 import express from "express"
 import dotenv from "dotenv"
 dotenv.config()
@@ -23,6 +22,5 @@ app.use(express.static('public'))
 // routes
 app.use ("/api/v1/healtcheck",healthcheckRouter)
 app.use ("/api/admin",admin)
-
 
 export { app }
