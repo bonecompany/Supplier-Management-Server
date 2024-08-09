@@ -2,7 +2,7 @@ import { Admin } from "../models/admin.model.js";
 import async_handler from "../utils/asyncHandler.js";
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt";
-import { ApiError } from "../utils/ApiError.js";
+import  ApiError  from "../utils/ApiError.js";
 
 
 // create_admin-----------------------------------------
