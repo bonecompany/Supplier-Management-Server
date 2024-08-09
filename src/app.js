@@ -1,6 +1,7 @@
 // app
-
 import express from "express"
+import dotenv from "dotenv"
+dotenv.config()
 import cors from "cors"
 import healthcheckRouter from "./routes/healthcheck.routes.js"
 import admin from "./routes/admin.routes.js"
@@ -21,7 +22,5 @@ app.use(express.static('public'))
 // routes
 app.use ("/api/v1/healtcheck",healthcheckRouter)
 app.use ("/api/admin",admin)
-app.use ("/api/supplier",supplier)
-
 
 export { app }

@@ -2,7 +2,7 @@ import bcrypt from "bcrypt"
 import async_handler from "../utils/asyncHandler.js";
 import { supplierJoi } from "../validation/supplier.joi.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { ApiError } from "../utils/ApiError.js";
+import  ApiError  from "../utils/ApiError.js";
 import  {supplierModel}  from "../models/suppliers.model.js";
 
 
