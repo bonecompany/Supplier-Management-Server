@@ -8,13 +8,6 @@ export const supplierJoi = Joi.object({
         "string.max": `name must be at most 30 characters long`,
         "any.required": `name is required`
     }),
-    username: Joi.string().min(4).max(10).required().messages({
-        "string.base": `username must be a string`,
-        "string.empty": "Username is required",
-        "string.min": `username must be at least 4 characters long`,
-        "string.max": `username must be at most 10 characters long`,
-        "any.required": `username is required`
-    }),
     password: Joi.string().required().min(4).max(10).messages({
         "string.base": `password must be a string`,
         "string.empty": "Password is required",
@@ -22,14 +15,14 @@ export const supplierJoi = Joi.object({
         "string.max": `password must be at most 10 characters long`,
         "any.required": `password is required`
     }),
-    phone: Joi.string().pattern(new RegExp("^ ((\\+91)|(91))?[6-9]\\d{9}$")).required().messages({
+    phone: Joi.string().pattern(new RegExp("^((\\+91)|(91))?[6-9]\\d{9}$")).required().messages({
         "string.base": "Phone number should be a type of text",
         "string.empty": "Phone number is required",
         "any.required": "Phone number is required",
         "string.pattern.base": "Enter a valid phone number with country code"
     }),
-    Bone_id: Joi.number().required().messages({
-        "number.base": "Bone id must be a number",
+    Bone_id: Joi.string().required().messages({
+        "number.base": "Bone id must be a string",
         "any.required": "Bone id is required"
     }),
     address: Joi.string().required().messages({
