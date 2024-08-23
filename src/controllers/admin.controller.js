@@ -1,26 +1,13 @@
-<<<<<<< HEAD
-import async_handler from "../utils/asyncHandler.js";
-import { supplierModel } from "../models/suppliers.model.js";
-import { ApiError } from "../utils/ApiError.js";
-import ApiResponse from "../utils/ApiResponse.js";
-
-// admin login
-
-const admin_login = async_handler(async (req, res) => {
-
-   const { username, password } = req.body
-=======
 import { Admin } from "../models/admin.model.js";
 import async_handler from "../utils/asyncHandler.js";
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt";
-import  ApiError  from "../utils/ApiError.js";
+import ApiError from "../utils/ApiError.js";
 
 
 // create_admin-----------------------------------------
 const admin_creating = async_handler(async (req, res) => {
    const { username, password } = req.body;
->>>>>>> f5c1cdf8aec4f61595595905d8153bc680539c3c
 
    const hashedPassword = await bcrypt.hash(password, 10);
    const newAdmin = new Admin({ username, password: hashedPassword });
@@ -28,12 +15,8 @@ const admin_creating = async_handler(async (req, res) => {
    res.status(201).json({ message: 'Admin registered successfully' });
 });
 
-<<<<<<< HEAD
-   await res.json(username)
-=======
 // admin login------------------------------------------
 const admin_login = async_handler(async (req, res) => {
->>>>>>> f5c1cdf8aec4f61595595905d8153bc680539c3c
 
    const { username, password } = req.body
 
@@ -73,13 +56,7 @@ const supplier_listing = async_handler(async (req, res) => {
 });
 
 export default {
-<<<<<<< HEAD
+
    admin_login,
    supplier_listing
 }
-=======
-   admin_creating,
-   admin_login
-}
-
->>>>>>> f5c1cdf8aec4f61595595905d8153bc680539c3c

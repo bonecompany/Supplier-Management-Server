@@ -22,14 +22,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 
 // routes
-<<<<<<< HEAD
 app.use("/api/v1/healtcheck", healthcheckRouter)
 app.use("/api/admin", admin)
 app.use("/api/supplier", supplier)
 
-=======
-app.use ("/api/v1/healtcheck",healthcheckRouter)
-app.use ("/api/admin",admin)
->>>>>>> f5c1cdf8aec4f61595595905d8153bc680539c3c
 
 export { app }
