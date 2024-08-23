@@ -8,10 +8,12 @@ import supplier from "./routes/suppliers.routes.js"
 const app = express()
 
 // cors
-app.use(cors({
-    origin: process.env.CORS_ORGIN,
-    credentials: true
-}))
+// app.use(cors({
+//     origin: process.env.CORS_ORGIN,
+//     credentials: true
+// }))
+
+app.use(cors())
 
 // common middleware
 app.use(express.json())
@@ -19,9 +21,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 
 // routes
-app.use ("/api/v1/healtcheck",healthcheckRouter)
-app.use ("/api/admin",admin)
-app.use ("/api/supplier",supplier)
+app.use("/api/v1/healtcheck", healthcheckRouter)
+app.use("/api/admin", admin)
+app.use("/api/supplier", supplier)
 
 
 export { app }

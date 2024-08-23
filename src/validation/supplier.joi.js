@@ -8,7 +8,7 @@ export const supplierJoi = Joi.object({
         "string.max": `name must be at most 30 characters long`,
         "any.required": `name is required`
     }),
-    password: Joi.string().required().min(4).max(10).messages({
+    password: Joi.string().min(4).max(10).messages({
         "string.base": `password must be a string`,
         "string.empty": "Password is required",
         "string.min": `password must be at least 4 characters long`,
@@ -19,7 +19,7 @@ export const supplierJoi = Joi.object({
         "string.base": "Phone number should be a type of text",
         "string.empty": "Phone number is required",
         "any.required": "Phone number is required",
-        "string.pattern.base": "Enter a valid phone number with country code"
+        "string.pattern.base": "Enter a valid phone number"
     }),
     Bone_id: Joi.string().required().messages({
         "number.base": "Bone id must be a string",

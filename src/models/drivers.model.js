@@ -12,16 +12,15 @@ const drivers_schema = new Schema(
 
         refresh_token: { type: String },
 
-        vehicle_number : {type : String},
+        vehicle_number: { type: String },
 
-
-        suppliers : [
+        suppliers: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "Suppliers"
             }
         ],
-        tappers : [
+        tappers: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "Tappers"
