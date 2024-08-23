@@ -30,7 +30,7 @@ const admin_login = async_handler(async (req, res) => {
    const adminToken = jwt.sign({ id: admin._id, isAdmin: true }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
    res.json({
-      message: "Admin login successfully",
+      message: "Admin logined successfully",
       adminToken
    });
 })
