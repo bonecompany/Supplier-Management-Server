@@ -4,9 +4,9 @@ const supplier_schema = new Schema(
     {
         name: { type: String, index: true },
 
-        phone: { type: String, require: [true, "enter mobile number"] },
+        phone: { type: Number, },
 
-        Bone_id: { type: Number, unique:true },
+        Bone_id: { type: String, unique: true },
 
         GST: { type: String },
 
@@ -14,19 +14,29 @@ const supplier_schema = new Schema(
 
         state_code: { type: Number },
 
-        address: { type: String, require: true },
+        address: { type: String },
+
+        location: { type: String },
 
         account_no: { type: String },
 
         RDB: { type: String },
 
-        remarks: { type: String, require: true },
+        remarks: { type: String },
 
-        password: { type: String, required: true },
+        password: { type: String },
 
         refresh_token: { type: String },
 
         min_latex: { type: Number },
+
+        category: {
+            type: String, enum: ["Daily Collection",
+                "Alternative Day Collection",
+                "Barrel Collection",
+                "Lease Plantation",
+                "Slaughter Plantation",]
+        },
 
         tappers: [
             {

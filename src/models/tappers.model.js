@@ -10,7 +10,7 @@ const tappers_schema = new Schema(
 
         password: { type: String, required: true },
 
-        refresh_token: { type: String },
+        refresh_token: { type: String },    
 
         suppliers : [
             {
