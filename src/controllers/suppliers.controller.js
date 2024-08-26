@@ -2,7 +2,7 @@ import bcrypt from "bcrypt"
 import async_handler from "../utils/asyncHandler.js";
 import { supplierJoi } from "../validation/supplier.joi.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { ApiError } from "../utils/ApiError.js";
+import ApiError from "../utils/ApiError.js";
 import { supplierModel } from "../models/suppliers.model.js";
 
 
@@ -15,24 +15,26 @@ const registration = async_handler(async (req, res) => {
 
   console.log(req.body)
 
+  // checking existing 
+
+  const exisitingUser = await supplierModel.findOne({ Bone_id: req.body.Bone_id })
+
+  if (exisitingUser) {
+    const apiError = new ApiError(400, "Supplier already exists");
+    return res.status(apiError.statusCode).json(apiError);
+  }
+
+
   const { error, value } = supplierJoi.validate(req.body, { abortEarly: false });
   console.log(value)
   console.log(error)
 
   if (error) {
     const errors = error.details.map(detail => detail.message);
-    const apiError = new ApiError(400, { message: "Validation error", errors });
+    const apiError = new ApiError(400, errors);
     return res.status(apiError.statusCode).json(apiError);
   }
 
-  // checking existing 
-
-  const exisitingUser = await supplierModel.findOne({ Bone_id: value.Bone_id })
-
-  if (exisitingUser) {
-    const apiError = new ApiError(400, "Supplier already exists");
-    return res.status(apiError.statusCode).json(apiError);
-  }
 
   const generatePassword = Math.floor(1000 + Math.random() * 9000)
 

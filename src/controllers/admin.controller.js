@@ -3,6 +3,8 @@ import async_handler from "../utils/asyncHandler.js";
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt";
 import ApiError from "../utils/ApiError.js";
+import { supplierModel } from "../models/suppliers.model.js";
+import ApiResponse from "../utils/ApiResponse.js";
 
 
 // create_admin-----------------------------------------
@@ -38,16 +40,18 @@ const admin_login = async_handler(async (req, res) => {
 // suppliers listing
 
 const supplier_listing = async_handler(async (req, res) => {
+
+
    try {
       const data = await supplierModel.find();
 
       if (!data || data.length === 0) {
          const apiError = new ApiError(404, "No suppliers found");
+
          return res.status(apiError.statusCode).json(apiError);
       }
-
-      return res.json(new ApiResponse(200, data, "Suppliers retrieved successfully"));
-
+      // return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
+      res.send(data)
    } catch (error) {
 
       const apiError = new ApiError(500, "An error occurred while retrieving suppliers");
