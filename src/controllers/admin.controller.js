@@ -41,26 +41,31 @@ const admin_login = async_handler(async (req, res) => {
 
 const supplier_listing = async_handler(async (req, res) => {
 
-
    try {
       const data = await supplierModel.find();
-
       if (!data || data.length === 0) {
          const apiError = new ApiError(404, "No suppliers found");
-
          return res.status(apiError.statusCode).json(apiError);
       }
       // return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
       res.send(data)
    } catch (error) {
-
       const apiError = new ApiError(500, "An error occurred while retrieving suppliers");
       return res.status(apiError.statusCode).json(apiError);
    }
 });
 
+// get specific supplier
+
+const supplier_find = async_handler(async (req, res) => {
+const id = req.params.id
+const data = await supplierModel.find({Bone_id:id})
+   res.send(data)
+})
+
 export default {
 
    admin_login,
-   supplier_listing
+   supplier_listing,
+   supplier_find
 }
