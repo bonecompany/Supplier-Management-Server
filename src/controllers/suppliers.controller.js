@@ -52,7 +52,7 @@ const registration = async_handler(async (req, res) => {
   const compare = await bcrypt.compare(password, hashPassword);
   console.log("Password comparison result:", compare);
 
-  return res.json(new ApiResponse(201, value, "Supplier registered successfully", password))
+  return res.json(new ApiResponse(value, 201, "Supplier registered successfully", password))
 })
 
 //supplier login
