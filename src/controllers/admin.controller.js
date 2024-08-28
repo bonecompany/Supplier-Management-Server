@@ -58,9 +58,9 @@ const supplier_listing = async_handler(async (req, res) => {
 // get specific supplier
 
 const supplier_find = async_handler(async (req, res) => {
-const id = req.params.id
-const data = await supplierModel.find({Bone_id:id})
-   res.send(data)
+   const id = req.params.id
+   const data = await supplierModel.findOne({ Bone_id: id })
+   res.json(data)
 })
 
 
@@ -75,7 +75,6 @@ const daily_latex_add = async_handler (async (req,res) => {
 
 
 export default {
-
    admin_login,
    supplier_listing,
    supplier_find,
