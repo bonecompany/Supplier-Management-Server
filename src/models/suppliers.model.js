@@ -2,11 +2,11 @@ import mongoose, { Schema } from "mongoose";
 
 const supplier_schema = new Schema(
     {
-        name: { type: String, index: true },
+        name: { type: String },
 
         phone: { type: Number, },
 
-        Bone_id: { type: String, unique: true },
+        Bone_id: { type: String, unique: true, index: true },
 
         GST: { type: String },
 

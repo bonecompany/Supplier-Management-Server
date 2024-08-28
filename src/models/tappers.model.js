@@ -10,19 +10,19 @@ const tappers_schema = new Schema(
 
         password: { type: String, required: true },
 
-        refresh_token: { type: String },    
+        refresh_token: { type: String },
 
-        suppliers : [
+        suppliers: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "Suppliers"
             }
         ],
 
-        drivers : [
+        drivers: [
             {
                 type: Schema.Types.ObjectId,
-                ref:"Drivers"
+                ref: "Drivers"
             }
         ]
 

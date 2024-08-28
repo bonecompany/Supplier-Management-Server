@@ -63,9 +63,22 @@ const data = await supplierModel.find({Bone_id:id})
    res.send(data)
 })
 
+
+// Add latex
+
+const daily_latex_add = async_handler (async (req,res) => {
+
+ console.log(req.params.boneid)
+ res.send(req.params.boneid)
+
+})
+
+
 export default {
 
    admin_login,
    supplier_listing,
-   supplier_find
+   supplier_find,
+   daily_latex_add
+   
 }
