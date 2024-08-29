@@ -9,10 +9,7 @@ import { supplierModel } from "../models/suppliers.model.js";
 
 //supplier registration
 const registration = async_handler(async (req, res) => {
-
-
   console.log("object");
-
   console.log(req.body)
 
   // checking existing 
@@ -24,7 +21,6 @@ const registration = async_handler(async (req, res) => {
     return res.status(apiError.statusCode).json(apiError);
   }
 
-
   const { error, value } = supplierJoi.validate(req.body, { abortEarly: false });
   console.log(value)
   console.log(error)
@@ -34,7 +30,6 @@ const registration = async_handler(async (req, res) => {
     const apiError = new ApiError(400, errors);
     return res.status(apiError.statusCode).json(apiError);
   }
-
 
   const generatePassword = Math.floor(1000 + Math.random() * 9000)
 

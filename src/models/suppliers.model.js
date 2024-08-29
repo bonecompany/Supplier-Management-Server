@@ -20,6 +20,8 @@ const supplier_schema = new Schema(
 
         account_no: { type: String },
 
+        IFSC_code: { type: String },
+
         RDB: { type: String },
 
         remarks: { type: String },
