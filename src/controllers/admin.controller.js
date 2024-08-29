@@ -63,8 +63,27 @@ const supplier_find = async_handler(async (req, res) => {
    res.json(data)
 })
 
+const upadteSupplierProfile = async_handler(async (req, res) => {
+   const { supplierId } = req.params
+
+   const updatedSupplier = await supplierModel
+      .findByIdAndUpdate(supplierId, req.body, { new: true })
+      .populate("drivers")
+      .populate("tappers");
+
+   if (!updatedSupplier) {
+      return res.status(404).json({ message: 'Supplier not found' });
+   }
+
+   res.status(201).json({
+      message: "Profile updated successfully",
+      updatedSupplier
+   });
+})
+
 export default {
    admin_login,
    supplier_listing,
-   supplier_find
+   supplier_find,
+   upadteSupplierProfile
 }
