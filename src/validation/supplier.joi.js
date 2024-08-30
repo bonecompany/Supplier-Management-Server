@@ -52,7 +52,7 @@ export const supplierJoi = Joi.object({
     state_code: Joi.number().optional(),
     account_no: Joi.string().allow(''),
     ifsc: Joi.string().allow(''),
-    RDB: Joi.string().allow(''),
+    RBD_no: Joi.string().allow(''),
     remarks: Joi.string().allow(''),
     refresh_token: Joi.string().allow(''),
     min_latex: Joi.number().optional(),
