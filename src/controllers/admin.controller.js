@@ -47,8 +47,8 @@ const supplier_listing = async_handler(async (req, res) => {
          const apiError = new ApiError(404, "No suppliers found");
          return res.status(apiError.statusCode).json(apiError);
       }
-      // return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
-      res.send(data)
+      return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
+
    } catch (error) {
       const apiError = new ApiError(500, "An error occurred while retrieving suppliers");
       return res.status(apiError.statusCode).json(apiError);
@@ -60,21 +60,35 @@ const supplier_listing = async_handler(async (req, res) => {
 const supplier_find = async_handler(async (req, res) => {
    const id = req.params.id
    const data = await supplierModel.findOne({ Bone_id: id })
-   res.json(data)
+   return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
 })
 
 
 // Add latex
 
 const daily_latex_add = async_handler (async (req,res) => {
+try {
 
- console.log(req.params.boneid)
- res.send(req.params.boneid)
+   const data = req.body
+   const latex_wt = data["latex-wt"]
+   const total_wt = data["total-wt"]
+
+   const sendData = latex_wt * total_wt
+
+   console.log(sendData)
+ return res.json(new ApiResponse(sendData, 200, "Suppliers retrieved successfully"));
+   
+} catch (error) {
+   res.send(error)
+   
+}
+
 
 })
 
 
 export default {
+
    admin_login,
    supplier_listing,
    supplier_find,
