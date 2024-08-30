@@ -64,21 +64,24 @@ const supplier_find = async_handler(async (req, res) => {
 })
 
 const upadteSupplierProfile = async_handler(async (req, res) => {
-   const { supplierId } = req.params
+
+   const { id } = req.params
 
    const updatedSupplier = await supplierModel
-      .findByIdAndUpdate(supplierId, req.body, { new: true })
-      .populate("drivers")
-      .populate("tappers");
+      .findByIdAndUpdate({ _id: id }, req.body, { new: true })
+   // .populate("drivers")
+   // .populate("tappers");
 
    if (!updatedSupplier) {
       return res.status(404).json({ message: 'Supplier not found' });
    }
 
-   res.status(201).json({
-      message: "Profile updated successfully",
-      updatedSupplier
-   });
+   // return res.status(201).json({
+   //    message: "Profile updated successfully",
+   //    updatedSupplier
+   // });
+
+   return res.json(new ApiResponse(updatedSupplier, 200, "Profile updated successfully"))
 })
 
 export default {
