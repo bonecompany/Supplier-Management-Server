@@ -82,9 +82,20 @@ const upadteSupplierProfile = async_handler(async (req, res) => {
    return res.json(new ApiResponse(updatedSupplier, 200, "Profile updated successfully"))
 })
 
+// Delete Supplier----------------------------------------
+const deleteSupplier = async_handler(async (req, res) => {
+   const { id } = req.params
+
+   const deletedSupplier = await supplierModel.findByIdAndDelete({ _id: id })
+   
+   return res.json(new ApiResponse(deletedSupplier, 200, "Supplier deleted successfully"))
+})
+
 export default {
    admin_login,
    supplier_listing,
    supplier_find,
-   upadteSupplierProfile
+   upadteSupplierProfile,
+   deleteSupplier,
+
 }
