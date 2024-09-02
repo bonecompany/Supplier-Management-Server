@@ -13,6 +13,7 @@ const letex_schema = new Schema({
     film_weight: Number,
     drc_percentage: Number,
     drc_quantity: Number,
+    
     daily_rate:{
         type:Schema.Types.ObjectId,
         ref:"Admin"

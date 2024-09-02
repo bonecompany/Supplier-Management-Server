@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import ApiError from "../utils/ApiError.js";
 import { supplierModel } from "../models/suppliers.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
+import { latex } from "../models/latex.model.js";
 
 
 // create_admin-----------------------------------------
@@ -70,20 +71,29 @@ const daily_latex_add = async_handler (async (req,res) => {
 try {
 
    const data = req.body
-   const latex_wt = data["latex-wt"]
-   const total_wt = data["total-wt"]
 
-   const sendData = latex_wt * total_wt
+   const total_weight = data.totalWeight
+   const jars = data.jars
+   const  jars_weight = data.jarsWeight
 
+
+
+ 
+   const sendData = {   
+      total_weight,
+      jars,
+      jars_weight : jars * jars_weight,
+      latex_weight : total_weight - jars * jars_weight
+   }
+   await latex.create(
+      sendData
+   )
    console.log(sendData)
  return res.json(new ApiResponse(sendData, 200, "Suppliers retrieved successfully"));
    
 } catch (error) {
    res.send(error)
-   
 }
-
-
 })
 
 
