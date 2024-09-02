@@ -54,6 +54,12 @@ const supplier_schema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: "Drivers"
             }
+        ],
+        latex: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Latex"
+            }
         ]
 
     },

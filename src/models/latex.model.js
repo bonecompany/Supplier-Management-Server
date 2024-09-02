@@ -1,16 +1,17 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 const letex_schema = new Schema({
 
     owner: {
-        type: Schema.Types.ObjectId,
+        type:Schema.Types.ObjectId,
         ref: "Suppliers"
+        
     },
     total_weight: Number,
     jars: Number,
     jars_weight: Number,
     latex_weight: Number,
-    film_weight: Number,
+    film_weight: Number, 
     drc_percentage: Number,
     drc_quantity: Number,
     

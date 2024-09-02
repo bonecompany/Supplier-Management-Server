@@ -70,14 +70,13 @@ const daily_latex_add = async_handler (async (req,res) => {
 try {
 
    const data = req.body
+   const owner = data.id
    const total_weight = data.totalWeight
    const jars = data.jars
    const  jars_weight = data.jarsWeight
 
-
-
- 
    const sendData = {   
+      owner,
       total_weight,
       jars,
       jars_weight : jars * jars_weight,
@@ -98,35 +97,29 @@ try {
 const upadteSupplierProfile = async_handler(async (req, res) => {
 
    const { id } = req.params
+   console.log(req.params)
 
    const updatedSupplier = await supplierModel
       .findByIdAndUpdate({ _id: id }, req.body, { new: true })
    // .populate("drivers")
    // .populate("tappers");
-
    if (!updatedSupplier) {
       return res.status(404).json({ message: 'Supplier not found' });
    }
-
    // return res.status(201).json({
    //    message: "Profile updated successfully",
    //    updatedSupplier
    // });
-
    return res.json(new ApiResponse(updatedSupplier, 200, "Profile updated successfully"))
 })
 
 // Delete Supplier----------------------------------------
 const deleteSupplier = async_handler(async (req, res) => {
    const { id } = req.params
-
    const deletedSupplier = await supplierModel.findByIdAndDelete({ _id: id })
-   
    return res.json(new ApiResponse(deletedSupplier, 200, "Supplier deleted successfully"))
 })
-
 export default {
-
    admin_login,
    supplier_listing,
    supplier_find,
