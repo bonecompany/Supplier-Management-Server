@@ -48,7 +48,6 @@ const supplier_listing = async_handler(async (req, res) => {
       }
       return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
 
-      res.send(data);
    } catch (error) {
       const apiError = new ApiError(500, "An error occurred while retrieving suppliers");
       return res.status(apiError.statusCode).json(apiError);
@@ -59,8 +58,8 @@ const supplier_listing = async_handler(async (req, res) => {
 // get specific supplier---------------------------------
 const supplier_find = async_handler(async (req, res) => {
    const id = req.params.id
-   const data = await supplierModel.findOne({ Bone_id: id })
-   return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
+   const supplierProfile = await supplierModel.findOne({ Bone_id: id })
+   return res.json(new ApiResponse(supplierProfile, 200, "Suppliers retrieved successfully"));
 })
 
 
@@ -97,7 +96,6 @@ try {
 const upadteSupplierProfile = async_handler(async (req, res) => {
 
    const { id } = req.params
-   console.log(req.params)
 
    const updatedSupplier = await supplierModel
       .findByIdAndUpdate({ _id: id }, req.body, { new: true })
@@ -106,10 +104,7 @@ const upadteSupplierProfile = async_handler(async (req, res) => {
    if (!updatedSupplier) {
       return res.status(404).json({ message: 'Supplier not found' });
    }
-   // return res.status(201).json({
-   //    message: "Profile updated successfully",
-   //    updatedSupplier
-   // });
+
    return res.json(new ApiResponse(updatedSupplier, 200, "Profile updated successfully"))
 })
 
