@@ -20,7 +20,9 @@ const supplier_schema = new Schema(
 
         account_no: { type: String },
 
-        RDB: { type: String },
+        ifsc: { type: String },
+
+        RBD_no: { type: String },
 
         remarks: { type: String },
 
@@ -37,6 +39,8 @@ const supplier_schema = new Schema(
                 "Lease Plantation",
                 "Slaughter Plantation",]
         },
+
+        isActive: { type: Boolean, default: true },
 
         tappers: [
             {

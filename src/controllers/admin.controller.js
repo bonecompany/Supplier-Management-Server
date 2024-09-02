@@ -38,26 +38,25 @@ const admin_login = async_handler(async (req, res) => {
    });
 })
 
-// suppliers listing
-
+// suppliers listing----------------------------------------
 const supplier_listing = async_handler(async (req, res) => {
-
    try {
-      const data = await supplierModel.find();
+      const data = await supplierModel.find().select('id Bone_id name location category phone createdAt isActive');
       if (!data || data.length === 0) {
          const apiError = new ApiError(404, "No suppliers found");
          return res.status(apiError.statusCode).json(apiError);
       }
       return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
 
+      res.send(data);
    } catch (error) {
       const apiError = new ApiError(500, "An error occurred while retrieving suppliers");
       return res.status(apiError.statusCode).json(apiError);
    }
 });
 
-// get specific supplier
 
+// get specific supplier---------------------------------
 const supplier_find = async_handler(async (req, res) => {
    const id = req.params.id
    const data = await supplierModel.findOne({ Bone_id: id })
@@ -71,7 +70,6 @@ const daily_latex_add = async_handler (async (req,res) => {
 try {
 
    const data = req.body
-
    const total_weight = data.totalWeight
    const jars = data.jars
    const  jars_weight = data.jarsWeight
@@ -96,12 +94,44 @@ try {
 }
 })
 
+// update supplier profile-------------------------------------
+const upadteSupplierProfile = async_handler(async (req, res) => {
+
+   const { id } = req.params
+
+   const updatedSupplier = await supplierModel
+      .findByIdAndUpdate({ _id: id }, req.body, { new: true })
+   // .populate("drivers")
+   // .populate("tappers");
+
+   if (!updatedSupplier) {
+      return res.status(404).json({ message: 'Supplier not found' });
+   }
+
+   // return res.status(201).json({
+   //    message: "Profile updated successfully",
+   //    updatedSupplier
+   // });
+
+   return res.json(new ApiResponse(updatedSupplier, 200, "Profile updated successfully"))
+})
+
+// Delete Supplier----------------------------------------
+const deleteSupplier = async_handler(async (req, res) => {
+   const { id } = req.params
+
+   const deletedSupplier = await supplierModel.findByIdAndDelete({ _id: id })
+   
+   return res.json(new ApiResponse(deletedSupplier, 200, "Supplier deleted successfully"))
+})
 
 export default {
 
    admin_login,
    supplier_listing,
    supplier_find,
-   daily_latex_add
-   
+   daily_latex_add,
+   upadteSupplierProfile,
+   deleteSupplier,
+
 }
