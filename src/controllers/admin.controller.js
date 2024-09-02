@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import ApiError from "../utils/ApiError.js";
 import { supplierModel } from "../models/suppliers.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
+import { latex } from "../models/latex.model.js";
 
 
 // create_admin-----------------------------------------
@@ -45,6 +46,8 @@ const supplier_listing = async_handler(async (req, res) => {
          const apiError = new ApiError(404, "No suppliers found");
          return res.status(apiError.statusCode).json(apiError);
       }
+      return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
+
       res.send(data);
    } catch (error) {
       const apiError = new ApiError(500, "An error occurred while retrieving suppliers");
@@ -57,44 +60,70 @@ const supplier_listing = async_handler(async (req, res) => {
 const supplier_find = async_handler(async (req, res) => {
    const id = req.params.id
    const data = await supplierModel.findOne({ Bone_id: id })
-   res.json(data)
+   return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
+})
+
+
+// Add latex
+
+const daily_latex_add = async_handler (async (req,res) => {
+try {
+
+   const data = req.body
+   const owner = data.id
+   const total_weight = data.totalWeight
+   const jars = data.jars
+   const  jars_weight = data.jarsWeight
+
+   const sendData = {   
+      owner,
+      total_weight,
+      jars,
+      jars_weight : jars * jars_weight,
+      latex_weight : total_weight - jars * jars_weight
+   }
+   await latex.create(
+      sendData
+   )
+   console.log(sendData)
+ return res.json(new ApiResponse(sendData, 200, "Suppliers retrieved successfully"));
+   
+} catch (error) {
+   res.send(error)
+}
 })
 
 // update supplier profile-------------------------------------
 const upadteSupplierProfile = async_handler(async (req, res) => {
 
    const { id } = req.params
+   console.log(req.params)
 
    const updatedSupplier = await supplierModel
       .findByIdAndUpdate({ _id: id }, req.body, { new: true })
    // .populate("drivers")
    // .populate("tappers");
-
    if (!updatedSupplier) {
       return res.status(404).json({ message: 'Supplier not found' });
    }
-
    // return res.status(201).json({
    //    message: "Profile updated successfully",
    //    updatedSupplier
    // });
-
    return res.json(new ApiResponse(updatedSupplier, 200, "Profile updated successfully"))
 })
 
 // Delete Supplier----------------------------------------
 const deleteSupplier = async_handler(async (req, res) => {
    const { id } = req.params
-
    const deletedSupplier = await supplierModel.findByIdAndDelete({ _id: id })
-   
    return res.json(new ApiResponse(deletedSupplier, 200, "Supplier deleted successfully"))
 })
-
 export default {
    admin_login,
    supplier_listing,
    supplier_find,
+   daily_latex_add,
    upadteSupplierProfile,
    deleteSupplier,
 

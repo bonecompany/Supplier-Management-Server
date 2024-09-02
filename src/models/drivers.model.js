@@ -2,21 +2,17 @@ import mongoose, { Schema } from "mongoose";
 
 const drivers_schema = new Schema(
     {
-        name: { type: String, required: true, index: true },
+        name: { type: String, },
 
         phone: { type: Number, require: [true, "enter mobile number"] },
 
-        address: { type: String, require: true },
+        address: { type: String, },
 
-        password: { type: String, required: true },
+        password: { type: String,  },
 
         refresh_token: { type: String },
 
-<<<<<<< HEAD
-        vehicle_number: { type: String },
-=======
         vehicle_number : {type : String},   
->>>>>>> f5c1cdf8aec4f61595595905d8153bc680539c3c
 
         suppliers: [
             {
