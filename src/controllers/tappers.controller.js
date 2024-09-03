@@ -40,7 +40,7 @@ const register = async_handler(async (req, res) => {
 
   await tappers.create(data)
 
-  return res.json(new ApiResponse(data, 201, "Supplier registered successfully"))
+  return res.json(new ApiResponse(data, 201, "tapper registered successfully"))
 })
 
 
