@@ -5,6 +5,6 @@ import tappers from "../controllers/tappers.controller.js"
 
  const router = Router()
 
-router.post("/register", tappers.register);
+router.post("/registration", tappers.register);
 
 export default router
