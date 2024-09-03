@@ -99,8 +99,8 @@ const upadteSupplierProfile = async_handler(async (req, res) => {
 
    const updatedSupplier = await supplierModel
       .findByIdAndUpdate({ _id: id }, req.body, { new: true })
+      .populate("tappers");
    // .populate("drivers")
-   // .populate("tappers");
    if (!updatedSupplier) {
       return res.status(404).json({ message: 'Supplier not found' });
    }
@@ -114,6 +114,8 @@ const deleteSupplier = async_handler(async (req, res) => {
    const deletedSupplier = await supplierModel.findByIdAndDelete({ _id: id })
    return res.json(new ApiResponse(deletedSupplier, 200, "Supplier deleted successfully"))
 })
+
+
 export default {
    admin_login,
    supplier_listing,
