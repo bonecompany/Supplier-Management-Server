@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import ApiError from "../utils/ApiError.js";
 import { supplierModel } from "../models/suppliers.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { latex } from "../models/latex.model.js";
+import { latexModel } from "../models/latex.model.js";
 
 
 // create_admin-----------------------------------------
@@ -58,38 +58,46 @@ const supplier_listing = async_handler(async (req, res) => {
 // get specific supplier---------------------------------
 const supplier_find = async_handler(async (req, res) => {
    const id = req.params.id
-   const supplierProfile = await supplierModel.findOne({ Bone_id: id })
+   const supplierProfile = await supplierModel.findOne({ Bone_id: id }).populate("tappers")
    return res.json(new ApiResponse(supplierProfile, 200, "Suppliers retrieved successfully"));
 })
 
 
 // Add latex
 
-const daily_latex_add = async_handler (async (req,res) => {
-try {
+const daily_latex_parchase = async_handler(async (req, res) => {
+   try {
 
-   const data = req.body
-   const owner = data.id
-   const total_weight = data.totalWeight
-   const jars = data.jars
-   const  jars_weight = data.jarsWeight
+      const data = req.body
+      const supplier = data.id
+      const total_weight = data.totalWeight
+      const jars = data.jars
+      const jars_weight = data.jarsWeight
 
-   const sendData = {   
-      owner,
-      total_weight,
-      jars,
-      jars_weight : jars * jars_weight,
-      latex_weight : total_weight - jars * jars_weight
+      const sendData = {
+         supplier,
+         total_weight,
+         jars,
+         jars_weight: jars * jars_weight,
+         latex_weight: total_weight - jars * jars_weight
+      }
+      await latex.create(
+         sendData
+      )
+      console.log(sendData)
+      return res.json(new ApiResponse(sendData, 200, "Suppliers retrieved successfully"));
+
+   } catch (error) {
+      res.send(error)
    }
-   await latex.create(
-      sendData
-   )
-   console.log(sendData)
- return res.json(new ApiResponse(sendData, 200, "Suppliers retrieved successfully"));
+})
+
+const latexParchase = async_handler(async (req, res) => {
+   console.log(req.body);
    
-} catch (error) {
-   res.send(error)
-}
+   const latexData = new latexModel(req.body);
+   await latexData.save();
+   res.json({ message: "Latex data saved successfully" });
 })
 
 // update supplier profile-------------------------------------
@@ -120,8 +128,8 @@ export default {
    admin_login,
    supplier_listing,
    supplier_find,
-   daily_latex_add,
+   daily_latex_parchase,
    upadteSupplierProfile,
    deleteSupplier,
-
+   latexParchase
 }
