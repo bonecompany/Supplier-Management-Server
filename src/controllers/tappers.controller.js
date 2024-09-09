@@ -12,12 +12,6 @@ import bcrypt from "bcrypt"
 const register = async_handler(async (req, res) => {
 
   console.log(req.body)
-  const exisitingSupplier = await supplierModel.findOne({ Bone_id: req.body.supplier })
-
-  if (!exisitingSupplier) {
-    const apiError = new ApiError(400, "Supplier not exists");
-    return res.status(apiError.statusCode).json(apiError);
-  }
 
   const { error, value } = tapperJoi.validate(req.body, { abortEarly: false });
 
@@ -26,17 +20,21 @@ const register = async_handler(async (req, res) => {
     const apiError = new ApiError(400, errors);
     return res.status(apiError.statusCode).json(apiError);
   }
-  const generatePassword = Math.floor(1000 + Math.random() * 9000)
 
-  const hashPassword = await bcrypt.hash(generatePassword.toString(), 10)
-  console.log(hashPassword, "hash");
+
+  const addSupplier = await supplierModel.findOne({ Bone_id: req.body.supplier })
 
   const data = {
     ...value,
     username: value.phone,
-    supplier: exisitingSupplier?._id,
+    supplier: addSupplier?._id,
     password: hashPassword
   }
+  
+
+ addSupplier.updateOne({tappers:data._id})
+
+ 
 
   await tappers.create(data)
 

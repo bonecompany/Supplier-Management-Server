@@ -4,8 +4,7 @@ const letex_schema = new Schema({
 
     owner: {
         type:Schema.Types.ObjectId,
-        ref: "Suppliers"
-        
+        ref: "Suppliers"       
     },
     total_weight: Number,
     jars: Number,

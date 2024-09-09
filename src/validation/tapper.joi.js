@@ -13,19 +13,14 @@ export const tapperJoi = Joi.object({
         "string.empty": "Password is required",
         "string.min": `password must be at least 4 characters long`,
     }),
-    supplier: Joi.string().required().messages({
-        "string.base": `Supplier ID must be a string`,
-        "string.empty": "Supplier ID is required",
+    supplier: Joi.string().length(24).optional().messages({
+        "string.base": "Tappers should be an array of valid ObjectId references"
     }),
     phone: Joi.string().pattern(new RegExp("^((\\+91)|(91))?[6-9]\\d{9}$")).required().messages({
         "string.base": "Phone number should be a type of text",
         "string.empty": "Phone number is required",
         "string.pattern.base": "Enter a valid phone number"
     }),
-    place: Joi.string().messages({
-        "string.base": `location must be a string`,
-        "string.empty": "Location is required",
-        "any.required": `location is required`
-    }),
+    place: Joi.string().optional(),
     rating:Joi.number().optional()
 })
