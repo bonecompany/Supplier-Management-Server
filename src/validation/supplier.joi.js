@@ -56,10 +56,7 @@ export const supplierJoi = Joi.object({
     remarks: Joi.string().allow(''),
     refresh_token: Joi.string().allow(''),
     min_latex: Joi.number().optional(),
-    tappers: Joi.string().length(24).optional().messages({
-        "string.base": "Tappers should be an array of valid ObjectId references"
-    }),
-    drivers: Joi.array().items(Joi.string().hex().length(24)).optional().messages({
-        "string.base": "Drivers should be an array of valid ObjectId references"
-    })
+    tappername:Joi.string().optional().allow(''),
+    tapperphone:Joi.string().optional().allow(''),
+    tapperplace:Joi.string().optional().allow(''),
 })

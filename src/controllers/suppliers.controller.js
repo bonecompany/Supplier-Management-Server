@@ -4,26 +4,22 @@ import { supplierJoi } from "../validation/supplier.joi.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import { supplierModel } from "../models/suppliers.model.js";
+import { tappers } from "../models/tappers.model.js"
 
 
 
-//supplier registration
 const registration = async_handler(async (req, res) => {
-  console.log("object");
-  console.log(req.body)
+  const BoneID = req.body.Bone_id;
+  
+console.log(BoneID)
+  const existingUser = await supplierModel.findOne({ Bone_id: BoneID });
 
-  // checking existing 
-
-  const exisitingUser = await supplierModel.findOne({ Bone_id: req.body.Bone_id })
-
-  if (exisitingUser) {
+  if (existingUser) {
     const apiError = new ApiError(400, "Supplier already exists");
     return res.status(apiError.statusCode).json(apiError);
   }
 
   const { error, value } = supplierJoi.validate(req.body, { abortEarly: false });
-  console.log(value)
-  console.log(error)
 
   if (error) {
     const errors = error.details.map(detail => detail.message);
@@ -31,21 +27,48 @@ const registration = async_handler(async (req, res) => {
     return res.status(apiError.statusCode).json(apiError);
   }
 
-  const generatePassword = Math.floor(1000 + Math.random() * 9000)
+  const { tappername, tapperphone, tapperplace, ...filterValues } = value;
 
-  const password = value.Bone_id + generatePassword
-  console.log(password)
+  const generatePassword = Math.floor(1000 + Math.random() * 9000);
+  const password = value.Bone_id + generatePassword;
+  const hashPassword = await bcrypt.hash(password, 10);
 
-  const hashPassword = await bcrypt.hash(password, 10)
-  console.log(hashPassword, "hash");
+  const generatePasswordTapper = Math.floor(1000 + Math.random() * 9000);
+  const hashPasswordTapper = await bcrypt.hash(generatePasswordTapper.toString(), 10);
 
-  await supplierModel.create({
-    ...value,
-    password: hashPassword
+  const data = {
+    name: tappername,
+    phone: tapperphone,
+    place: tapperplace,
+    password: hashPasswordTapper,
+    username: tapperphone
+  };
+
+  console.log(req.body)
+
+  let tapper 
+if(value.tappername !== ""){
+   tapper = await tappers.create(data);
+}
+
+
+  // Then create the supplier
+   const supplierCreated = await supplierModel.create({
+    ...filterValues,
+    password: hashPassword,
+    tapper: tapper?tapper._id:null
   });
 
-  return res.json(new ApiResponse(value, 201, "Supplier registered successfully", password))
-})
+if(tapper){
+  await tappers.updateOne(
+    {_id:tapper._id},
+    {$set:{supplier:supplierCreated._id}}
+  ) ;
+}
+ 
+  return res.json(new ApiResponse(value, 201, "Supplier registered successfully", password));
+});
+
 
 //supplier login
 const login = async_handler(async (req, res) => {
@@ -61,7 +84,7 @@ const login = async_handler(async (req, res) => {
     const apiError = new ApiError(400, "Invalid Bone_id");
     return res.status(apiError.statusCode).json(apiError);
   }
-  const isValidPassword = await bcrypt.compare(password, user.password);
+  const isValidPassword = bcrypt.compare(password, user.password);
   if (!isValidPassword) {
     const apiError = new ApiError(400, "Invalid password ");
     return res.status(apiError.statusCode).json(apiError);
@@ -69,6 +92,15 @@ const login = async_handler(async (req, res) => {
   return res.json(new ApiResponse(200, "Success"))
 
 })
+
+// const supplierTapperRegistration = async_handler(async (req,res) => {
+//   const BoneID = req.body.Bone_id;
+//   const existingUser = await supplierModel.findOne({ Bone_id: BoneID });
+//   if (existingUser) {
+//     const apiError = new ApiError(400, "Supplier already exists");
+//     return res.status(apiError.statusCode).json(apiError);
+//   }
+// })
 
 export const supplier = {
   registration,
