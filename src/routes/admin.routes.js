@@ -10,6 +10,7 @@ router.post("/supplier/latex", adminController.daily_latex_add);
 router.get("/supplier/profile/:id", adminController.supplier_find);
 router.put("/supplier/update/:id", adminController.upadteSupplierProfile);
 router.delete("/supplier/delete/:id", adminController.deleteSupplier);
+router.get("/tappers", adminController.tapperFind);
 
 
 export default router;

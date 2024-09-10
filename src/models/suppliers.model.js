@@ -42,12 +42,12 @@ const supplier_schema = new Schema(
 
         isActive: { type: Boolean, default: true },
 
-        tappers: [
+        tapper: 
             {
                 type: Schema.Types.ObjectId,
                 ref: "Tappers"
             }
-        ],
+        ,
 
         drivers: [
             {
@@ -59,6 +59,12 @@ const supplier_schema = new Schema(
             {
                 type: Schema.Types.ObjectId,
                 ref: "Latex"
+            }
+        ],
+        tappingData: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "TappingData"
             }
         ]
 

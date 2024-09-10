@@ -4,24 +4,23 @@ const tappers_schema = new Schema(
     {
         name: { type: String, },
 
-        phone: { type: Number,  },
+        phone: { type: Number, },
 
-        place: { type: String,  },
+        place: { type: String, },
 
-        username: { type: String,  },
+        username: { type: String, },
 
-        password: { type: String,  },
+        password: { type: String, },
 
-        rating : {type:Number},
+        rating: { type: Number },
 
 
         refresh_token: { type: String },
 
-        supplier: 
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Suppliers"
-            },
+        supplier: {
+            type: Schema.Types.ObjectId,
+            ref: "Suppliers",
+        },
 
         drivers: [
             {
@@ -29,12 +28,19 @@ const tappers_schema = new Schema(
                 ref: "Drivers"
             }
         ],
-        latex : [
+        latex: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "Latex"
             }
+        ],
+        tappingData: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "TappingData"
+            }
         ]
+
 
     },
     { timestamps: true }

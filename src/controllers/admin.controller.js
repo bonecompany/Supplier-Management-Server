@@ -6,6 +6,7 @@ import ApiError from "../utils/ApiError.js";
 import { supplierModel } from "../models/suppliers.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { latex } from "../models/latex.model.js";
+import { tappers } from "../models/tappers.model.js";
 
 
 // create_admin-----------------------------------------
@@ -65,31 +66,31 @@ const supplier_find = async_handler(async (req, res) => {
 
 // Add latex
 
-const daily_latex_add = async_handler (async (req,res) => {
-try {
+const daily_latex_add = async_handler(async (req, res) => {
+   try {
 
-   const data = req.body
-   const owner = data.id
-   const total_weight = data.totalWeight
-   const jars = data.jars
-   const  jars_weight = data.jarsWeight
+      const data = req.body
+      const owner = data.id
+      const total_weight = data.totalWeight
+      const jars = data.jars
+      const jars_weight = data.jarsWeight
 
-   const sendData = {   
-      owner,
-      total_weight,
-      jars,
-      jars_weight : jars * jars_weight,
-      latex_weight : total_weight - jars * jars_weight
+      const sendData = {
+         owner,
+         total_weight,
+         jars,
+         jars_weight: jars * jars_weight,
+         latex_weight: total_weight - jars * jars_weight
+      }
+      await latex.create(
+         sendData
+      )
+      console.log(sendData)
+      return res.json(new ApiResponse(sendData, 200, "Suppliers retrieved successfully"));
+
+   } catch (error) {
+      res.send(error)
    }
-   await latex.create(
-      sendData
-   )
-   console.log(sendData)
- return res.json(new ApiResponse(sendData, 200, "Suppliers retrieved successfully"));
-   
-} catch (error) {
-   res.send(error)
-}
 })
 
 // update supplier profile-------------------------------------
@@ -115,6 +116,40 @@ const deleteSupplier = async_handler(async (req, res) => {
    return res.json(new ApiResponse(deletedSupplier, 200, "Supplier deleted successfully"))
 })
 
+//Get Tapper
+
+const tapperFind = async_handler(async (req, res) => {
+
+   try {
+      const data = await tappers.find().select('id name phone supplier  createdAt place');
+      if (!data || data.length === 0) {
+         const apiError = new ApiError(404, "No suppliers found");
+         return res.status(apiError.statusCode).json(apiError);
+      }
+
+
+      // const aggregateData = await tappers.aggregate([
+      //    {
+      //       $lookup: {
+      //          from: 'supplierModel',
+      //          localField: '_id',
+      //          foreignField: 'tapper',
+      //          as: 'supplierDetails'
+      //       }
+      //    }
+      // ])
+      const aggregateData = await tappers.find()
+  .populate('supplier') 
+
+      console.log(aggregateData)
+
+      return res.json(new ApiResponse(aggregateData, 200, "Suppliers retrieved successfully"));
+   } catch (error) {
+      const apiError = new ApiError(500, "An error occurred while retrieving suppliers");
+      return res.status(apiError.statusCode).json(apiError);
+   }
+})
+
 
 export default {
    admin_login,
@@ -123,5 +158,6 @@ export default {
    daily_latex_add,
    upadteSupplierProfile,
    deleteSupplier,
+   tapperFind
 
 }
