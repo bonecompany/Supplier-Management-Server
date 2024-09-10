@@ -60,6 +60,12 @@ const supplier_schema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: "Latex"
             }
+        ],
+        tappingData: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "TappingData"
+            }
         ]
 
     },

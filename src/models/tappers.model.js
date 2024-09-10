@@ -17,9 +17,9 @@ const tappers_schema = new Schema(
 
         refresh_token: { type: String },
 
-        supplier: { 
+        supplier: {
             type: Schema.Types.ObjectId,
-            ref:"Suppliers",
+            ref: "Suppliers",
         },
 
         drivers: [
@@ -33,7 +33,14 @@ const tappers_schema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: "Latex"
             }
+        ],
+        tappingData: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "TappingData"
+            }
         ]
+
 
     },
     { timestamps: true }
