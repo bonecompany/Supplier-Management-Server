@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import ApiError from "../utils/ApiError.js";
 import { supplierModel } from "../models/suppliers.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { latex } from "../models/latex.model.js";
+import { latexModel } from "../models/latex.model.js";
 
 
 // create_admin-----------------------------------------
@@ -65,36 +65,36 @@ const supplier_find = async_handler(async (req, res) => {
 
 // Add latex
 
-const daily_latex_add = async_handler (async (req,res) => {
-try {
+const daily_latex_parchase = async_handler(async (req, res) => {
+   try {
 
-   const data = req.body
-   const owner = data.id
-   const total_weight = data.totalWeight
-   const jars = data.jars
-   const  jars_weight = data.jarsWeight
+      const data = req.body
+      const owner = data.id
+      const total_weight = data.totalWeight
+      const jars = data.jars
+      const jars_weight = data.jarsWeight
 
-   const sendData = {   
-      owner,
-      total_weight,
-      jars,
-      jars_weight : jars * jars_weight,
-      latex_weight : total_weight - jars * jars_weight
+      const sendData = {
+         owner,
+         total_weight,
+         jars,
+         jars_weight: jars * jars_weight,
+         latex_weight: total_weight - jars * jars_weight
+      }
+      await latex.create(
+         sendData
+      )
+      console.log(sendData)
+      return res.json(new ApiResponse(sendData, 200, "Suppliers retrieved successfully"));
+
+   } catch (error) {
+      res.send(error)
    }
-   await latex.create(
-      sendData
-   )
-   console.log(sendData)
- return res.json(new ApiResponse(sendData, 200, "Suppliers retrieved successfully"));
-   
-} catch (error) {
-   res.send(error)
-}
 })
 
 const latexParchase = async_handler(async (req, res) => {
    console.log(req.body);
-   
+
    const latexData = new latexModel(req.body);
    await latexData.save();
    res.json({ message: "Latex data saved successfully" });
@@ -146,7 +146,7 @@ const tapperFind = async_handler(async (req, res) => {
       //    }
       // ])
       const aggregateData = await tappers.find()
-  .populate('supplier') 
+         .populate('supplier')
 
       console.log(aggregateData)
 
@@ -165,5 +165,6 @@ export default {
    daily_latex_parchase,
    upadteSupplierProfile,
    deleteSupplier,
-
+   latexParchase,
+   tapperFind
 }
