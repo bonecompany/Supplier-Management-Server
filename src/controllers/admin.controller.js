@@ -5,8 +5,7 @@ import bcrypt from "bcrypt";
 import ApiError from "../utils/ApiError.js";
 import { supplierModel } from "../models/suppliers.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { latex } from "../models/latex.model.js";
-import { tappers } from "../models/tappers.model.js";
+import { latexModel } from "../models/latex.model.js";
 
 
 // create_admin-----------------------------------------
@@ -59,14 +58,14 @@ const supplier_listing = async_handler(async (req, res) => {
 // get specific supplier---------------------------------
 const supplier_find = async_handler(async (req, res) => {
    const id = req.params.id
-   const supplierProfile = await supplierModel.findOne({ Bone_id: id })
+   const supplierProfile = await supplierModel.findOne({ Bone_id: id }).populate("tappers")
    return res.json(new ApiResponse(supplierProfile, 200, "Suppliers retrieved successfully"));
 })
 
 
 // Add latex
 
-const daily_latex_add = async_handler(async (req, res) => {
+const daily_latex_parchase = async_handler(async (req, res) => {
    try {
 
       const data = req.body
@@ -91,6 +90,14 @@ const daily_latex_add = async_handler(async (req, res) => {
    } catch (error) {
       res.send(error)
    }
+})
+
+const latexParchase = async_handler(async (req, res) => {
+   console.log(req.body);
+
+   const latexData = new latexModel(req.body);
+   await latexData.save();
+   res.json({ message: "Latex data saved successfully" });
 })
 
 // update supplier profile-------------------------------------
@@ -139,7 +146,7 @@ const tapperFind = async_handler(async (req, res) => {
       //    }
       // ])
       const aggregateData = await tappers.find()
-  .populate('supplier') 
+         .populate('supplier')
 
       console.log(aggregateData)
 
@@ -155,9 +162,9 @@ export default {
    admin_login,
    supplier_listing,
    supplier_find,
-   daily_latex_add,
+   daily_latex_parchase,
    upadteSupplierProfile,
    deleteSupplier,
+   latexParchase,
    tapperFind
-
 }
