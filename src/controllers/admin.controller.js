@@ -118,7 +118,7 @@ const deleteSupplier = async_handler(async (req, res) => {
 
 //Get Tapper
 
-const tapperFind = async_handler(async (req, res) => {
+const tappersFind = async_handler(async (req, res) => {
 
    try {
       const data = await tappers.find().select('id name phone supplier  createdAt place');
@@ -150,6 +150,18 @@ const tapperFind = async_handler(async (req, res) => {
    }
 })
 
+const tapperFind = async_handler(async (req, res) => {
+   try {
+      const id = req.params.id
+      // const data = await tappers.findById(id)
+      const data = await tappers.findById(id).populate("tappingData")
+      return res.json(new ApiResponse(data, 200, "Suppliers retrieved successfully"));
+   } catch (error) {
+      const apiError = new ApiError(500, "An error occurred while retrieving suppliers");
+      return res.status(apiError.statusCode).json(apiError);
+   }
+})
+
 
 export default {
    admin_login,
@@ -158,6 +170,7 @@ export default {
    daily_latex_add,
    upadteSupplierProfile,
    deleteSupplier,
-   tapperFind
+   tappersFind,
+   tapperFind,
 
 }

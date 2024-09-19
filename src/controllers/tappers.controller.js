@@ -44,8 +44,9 @@ const register = async_handler(async (req, res) => {
 // tapping update
 
 const updateTapping = async_handler(async (req, res) => {
-  const id = req.params.id
 
+  const id = req.params.id
+ 
   const tapperFind = await tappers.findById({ _id: id })
   console.log(tapperFind)
   const data = {
@@ -56,8 +57,9 @@ const updateTapping = async_handler(async (req, res) => {
   }
 
   const createAct = await tappingAct.create(data)
-
-  console.log(createAct)
+  console.log("-------------------------------")
+  console.log(createAct,"")
+  console.log("-------------------------------")
 
   await tappers.updateOne({ _id: id }, { $addToSet: { tappingData: createAct?._id } })
   await supplierModel.updateOne({ _id: tapperFind.supplier }, { $addToSet: { tappingData: createAct?._id } })
@@ -68,8 +70,12 @@ const updateTapping = async_handler(async (req, res) => {
 // get tapping days 
 
 const getTappingActivity = async_handler(async (req, res) => {
+  console.log("-------------------------------")
   const id = req.params.id
+  console.log("-------------------------------")
   console.log(id);
+  console.log("-------------------------------")
+ 
   try {
     const findTapper = await tappers.findById({ _id: id }).populate({
       path: "tappingData",
