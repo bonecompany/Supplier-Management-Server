@@ -27,4 +27,4 @@ const letex_schema = new Schema({
 );
 
 // Latex Data Model
-export const latexModel = mongoose.model("Latex", latexDataSchema);
+export const latex = mongoose.model("Latex", letex_schema);

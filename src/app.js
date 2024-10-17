@@ -10,12 +10,13 @@ import driver from "./routes/drivers.routes.js"
 const app = express()
 
 // cors
-// app.use(cors({
-//     origin: process.env.CORS_ORGIN,
-//     credentials: true
-// }))
 
-app.use(cors())
+app.use(cors({
+    origin: process.env.CORS_ORGIN,
+    credentials: true
+}))
+
+
 
 // common middleware
 app.use(express.json())

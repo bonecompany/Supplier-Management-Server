@@ -13,7 +13,7 @@ router.get("/supplier/profile/:id", adminController.supplier_find);
 router.put("/supplier/update/:id", adminController.upadteSupplierProfile);
 router.delete("/supplier/delete/:id", adminController.deleteSupplier);
 router.get("/suppliers/latexdata",adminController.supplier_latexdata)
-router.post("/suppliers/drcupdation",adminController.drc_updation)
+// router.post("/suppliers/drcupdation",adminController.drc_updation)
 
 
 // tapper controller by admin
@@ -30,7 +30,6 @@ router.get("/driver/supplier", adminController.driver_supplier);
 
 
 router.post("/supplier/latex", adminController.daily_latex_parchase);
-router.post("/latex-purchase", adminController.latexParchase);
 
 
 export default router;
