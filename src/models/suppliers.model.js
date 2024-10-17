@@ -26,6 +26,8 @@ const supplier_schema = new Schema(
 
         remarks: { type: String },
 
+        username: { type: String },
+
         password: { type: String },
 
         refresh_token: { type: String },
@@ -42,12 +44,12 @@ const supplier_schema = new Schema(
 
         isActive: { type: Boolean, default: true },
 
-        tapper: 
+        tappers: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "Tappers"
             }
-        ,
+        ],
 
         drivers: [
             {

@@ -59,14 +59,14 @@ const supplier_listing = async_handler(async (req, res) => {
 // get specific supplier---------------------------------
 const supplier_find = async_handler(async (req, res) => {
    const id = req.params.id
-   const supplierProfile = await supplierModel.findOne({ Bone_id: id })
+   const supplierProfile = await supplierModel.findOne({ Bone_id: id }).populate("tappers")
    return res.json(new ApiResponse(supplierProfile, 200, "Suppliers retrieved successfully"));
 })
 
 
 // Add latex
 
-const daily_latex_add = async_handler(async (req, res) => {
+const daily_latex_parchase = async_handler(async (req, res) => {
    try {
       const body = req.body.data.slice(1);
       const date = req.body.data[0];
@@ -132,6 +132,14 @@ const daily_latex_add = async_handler(async (req, res) => {
 });
 
 
+
+const latexParchase = async_handler(async (req, res) => {
+   console.log(req.body);
+
+   const latexData = new latexModel(req.body);
+   await latexData.save();
+   res.json({ message: "Latex data saved successfully" });
+})
 
 // update supplier profile-------------------------------------
 const upadteSupplierProfile = async_handler(async (req, res) => {
@@ -336,7 +344,7 @@ export default {
    admin_login,
    supplier_listing,
    supplier_find,
-   daily_latex_add,
+   daily_latex_parchase,
    upadteSupplierProfile,
    deleteSupplier,
    tappersFind,

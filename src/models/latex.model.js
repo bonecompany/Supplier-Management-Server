@@ -2,8 +2,8 @@ import mongoose, { Schema } from "mongoose";
 
 const letex_schema = new Schema({
     owner: {
-        type:Schema.Types.ObjectId,
-        ref: "Suppliers"       
+        type: Schema.Types.ObjectId,
+        ref: "Suppliers"
     },
     supplierName: String,
     supplierCode:String,
@@ -24,6 +24,7 @@ const letex_schema = new Schema({
     }
 },
     { timestamps: true }
-)
-export const latex = mongoose.model("Latex",letex_schema)
+);
 
+// Latex Data Model
+export const latexModel = mongoose.model("Latex", latexDataSchema);
