@@ -336,9 +336,9 @@ const supplier_latexdata = async_handler(async (req, res) => {
 
 // add drcupdation
 
-const drc_updation = async_handler ( async (req,res) => {
-console.log(res.body)
-})
+// const drc_updation = async_handler ( async (req,res) => {
+// console.log(res.body)
+// })
 
 export default {
    admin_login,
@@ -354,5 +354,5 @@ export default {
    add_driver_area,
    driver_supplier,
    supplier_latexdata,
-   drc_updation
+   // drc_updation
 }
