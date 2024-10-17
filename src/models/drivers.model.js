@@ -6,13 +6,13 @@ const drivers_schema = new Schema(
 
         phone: { type: Number, require: [true, "enter mobile number"] },
 
-        address: { type: String, },
+        location: { type: String, },
 
-        password: { type: String,  },
+        password: { type: String },
 
         refresh_token: { type: String },
 
-        vehicle_number : {type : String},   
+        latex_area: [{ type: String }],
 
         suppliers: [
             {

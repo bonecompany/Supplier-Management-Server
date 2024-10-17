@@ -6,6 +6,7 @@ import healthcheckRouter from "./routes/healthcheck.routes.js"
 import admin from "./routes/admin.routes.js"
 import supplier from "./routes/suppliers.routes.js"
 import tapper  from "./routes/tappers.routes.js"
+import driver from "./routes/drivers.routes.js"
 const app = express()
 
 // cors
@@ -26,6 +27,7 @@ app.use("/api/v1/healtcheck", healthcheckRouter)
 app.use("/api/admin", admin)
 app.use("/api/supplier", supplier)
 app.use("/api/tapper", tapper)
+app.use("/api/driver", driver)
 
 
 export { app }
