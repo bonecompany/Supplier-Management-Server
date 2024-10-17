@@ -16,8 +16,6 @@ app.use(cors({
     credentials: true
 }))
 
-
-
 // common middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
