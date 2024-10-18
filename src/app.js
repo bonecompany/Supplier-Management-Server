@@ -11,12 +11,12 @@ const app = express()
 
 // cors
 
-// app.use(cors({
-//     origin: process.env.CORS_ORGIN,
-//     credentials: true
-// }))
+app.use(cors({
+    origin: process.env.CORS_ORGIN,
+    credentials: true
+}))  
 
-app.use(cors())
+// app.use(cors())
 
 // common middleware
 app.use(express.json())
