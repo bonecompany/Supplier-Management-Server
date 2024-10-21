@@ -18,14 +18,16 @@ app.use(cors({
 
 // app.use(cors())
 
+
 // common middleware
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 
 // routes
-app.use("/api/v1/healtcheck", healthcheckRouter)
 
+app.use("/api/v1/healtcheck", healthcheckRouter)
 app.use("/api/admin", admin)
 app.use("/api/supplier", supplier)
 app.use("/api/tapper", tapper)
