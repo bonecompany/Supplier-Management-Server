@@ -11,24 +11,25 @@ import { drivers } from "../models/drivers.model.js";
 
 
 // create_admin-----------------------------------------
+
 const admin_creating = async_handler(async (req, res) => {
-
-   console.log(req.body)
-
    const { username, password } = req.body;
    const hashedPassword = await bcrypt.hash(password, 10);
    const newAdmin = new Admin({ username, password: hashedPassword });
    await newAdmin.save();
    res.status(201).json({ message: 'Admin registered successfully' });
-   
 });
 
+
+
 // admin login------------------------------------------
+
 const admin_login = async_handler(async (req, res) => {
 
    const { username, password } = req.body
 
    const admin = await Admin.findOne({ username });
+
    if (!admin) return res.status(400).json({ error: 'Invalid username' });
 
    const isMatch = await bcrypt.compare(password, admin.password);
@@ -41,6 +42,7 @@ const admin_login = async_handler(async (req, res) => {
       adminToken
    });
 })
+
 
 // suppliers listing----------------------------------------
 const supplier_listing = async_handler(async (req, res) => {
@@ -85,7 +87,6 @@ const daily_latex_parchase = async_handler(async (req, res) => {
          }
 
          const jars = parseInt(supplier.bigJarsCount) + parseInt(supplier.smallJarsCount);
-
          const createData = {
             owner: findSupplier._id,
             supplierName: supplier.supplierName,
