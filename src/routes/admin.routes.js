@@ -7,6 +7,7 @@ const router = Router()
 // supplier controller by admin
 
 router.post("/login", adminController.admin_login);
+router.post("/register", adminController.admin_creating);
 router.get("/suppliers", adminController.supplier_listing);
 router.get("/supplier/:id", adminController.supplier_find);
 router.get("/supplier/profile/:id", adminController.supplier_find);

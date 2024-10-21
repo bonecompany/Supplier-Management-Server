@@ -25,6 +25,7 @@ app.use(express.static('public'))
 
 // routes
 app.use("/api/v1/healtcheck", healthcheckRouter)
+
 app.use("/api/admin", admin)
 app.use("/api/supplier", supplier)
 app.use("/api/tapper", tapper)

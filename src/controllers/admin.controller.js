@@ -12,12 +12,15 @@ import { drivers } from "../models/drivers.model.js";
 
 // create_admin-----------------------------------------
 const admin_creating = async_handler(async (req, res) => {
-   const { username, password } = req.body;
 
+   console.log(req.body)
+
+   const { username, password } = req.body;
    const hashedPassword = await bcrypt.hash(password, 10);
    const newAdmin = new Admin({ username, password: hashedPassword });
    await newAdmin.save();
    res.status(201).json({ message: 'Admin registered successfully' });
+   
 });
 
 // admin login------------------------------------------
@@ -341,6 +344,7 @@ const supplier_latexdata = async_handler(async (req, res) => {
 // })
 
 export default {
+   admin_creating,
    admin_login,
    supplier_listing,
    supplier_find,
