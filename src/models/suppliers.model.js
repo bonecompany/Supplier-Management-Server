@@ -2,31 +2,47 @@ import mongoose, { Schema } from "mongoose";
 
 const supplier_schema = new Schema(
     {
-        name: { type: String, required: true, index: true },
+        name: { type: String },
 
-        phone: { type: Number, require: [true, "enter mobile number"] },
+        phone: { type: Number, },
 
-        Bone_id: { type: Number, require: true, unique: true },
+        Bone_id: { type: String, unique: true, index: true },
 
         GST: { type: String },
 
-        state: { type: String, require: true },
+        state: { type: String },
 
-        code: { type: Number, require: true },
+        state_code: { type: Number },
 
-        address: { type: String, require: true },
+        address: { type: String },
+
+        location: { type: String },
 
         account_no: { type: String },
 
-        RDB: { type: String },
+        ifsc: { type: String },
 
-        remarks: { type: String, require: true },
+        RBD_no: { type: String },
 
-        password: { type: String, required: true },
+        remarks: { type: String },
+
+        username: { type: String },
+
+        password: { type: String },
 
         refresh_token: { type: String },
 
-        avatar: { type: String },
+        min_latex: { type: Number },
+
+        category: {
+            type: String, enum: ["Daily Collection",
+                "Alternative Day Collection",
+                "Barrel Collection",
+                "Lease Plantation",
+                "Slaughter Plantation",]
+        },
+
+        isActive: { type: Boolean, default: true },
 
         tappers: [
             {
@@ -35,10 +51,22 @@ const supplier_schema = new Schema(
             }
         ],
 
-        drivers : [
+        drivers: [
             {
                 type: Schema.Types.ObjectId,
-                ref:"Drivers"
+                ref: "Drivers"
+            }
+        ],
+        latex: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Latex"
+            }
+        ],
+        tappingData: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "TappingData"
             }
         ]
 
@@ -47,4 +75,4 @@ const supplier_schema = new Schema(
 
 )
 
-export const supplier = mongoose.model("Suppliers", supplier_schema)
+export const supplierModel = mongoose.model("Suppliers", supplier_schema)
