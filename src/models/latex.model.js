@@ -21,7 +21,8 @@ const letex_schema = new Schema({
     daily_rate:{
         type:Schema.Types.ObjectId,
         ref:"Admin"
-    }
+    },
+    daily_latex_rate:Number
 },
     { timestamps: true }
 );

@@ -8,6 +8,7 @@ import ApiResponse from "../utils/ApiResponse.js";
 import { latex } from "../models/latex.model.js";
 import { tappers } from "../models/tappers.model.js";
 import { drivers } from "../models/drivers.model.js";
+import { DrcData } from "../models/drcdata.model.js";
 
 
 // create_admin-----------------------------------------
@@ -86,6 +87,9 @@ const daily_latex_parchase = async_handler(async (req, res) => {
             continue;
          }
 
+         const admin = await Admin.find()
+         console.log("------------- breedc")
+         console.log(admin[0]);
          const jars = parseInt(supplier.bigJarsCount) + parseInt(supplier.smallJarsCount);
          const createData = {
             owner: findSupplier._id,
@@ -97,7 +101,8 @@ const daily_latex_parchase = async_handler(async (req, res) => {
             big_jar: supplier.bigJarsCount,
             jars_weight: supplier.jarsWeight ? supplier.jarsWeight.toFixed(2) : 0,
             latex_weight: supplier.latexWeight ? supplier.latexWeight.toFixed(2) : 0,
-            date
+            date,
+            daily_latex_rate: admin ? admin[0].daily_rate : 0
          };
 
          createDataArray.push(createData);
@@ -136,14 +141,6 @@ const daily_latex_parchase = async_handler(async (req, res) => {
 });
 
 
-
-const latexParchase = async_handler(async (req, res) => {
-   console.log(req.body);
-
-   const latexData = new latexModel(req.body);
-   await latexData.save();
-   res.json({ message: "Latex data saved successfully" });
-})
 
 // update supplier profile-------------------------------------
 const upadteSupplierProfile = async_handler(async (req, res) => {
@@ -323,13 +320,13 @@ const supplier_latexdata = async_handler(async (req, res) => {
       };
    }
 
-   console.log(supplierId,"----------------")
+   console.log(supplierId, "----------------")
 
    try {
-        const supplier = await supplierModel.findOne({ Bone_id: supplierId }).populate({
-          path: 'latex',
-          match: dates
-        });
+      const supplier = await supplierModel.findOne({ Bone_id: supplierId }).populate({
+         path: 'latex',
+         match: dates
+      });
       console.log(supplier);
       return res.status(200).json(new ApiResponse(supplier, 200, "Latex retrieval successful"));
    } catch (error) {
@@ -338,11 +335,17 @@ const supplier_latexdata = async_handler(async (req, res) => {
    }
 });
 
+
 // add drcupdation
 
-// const drc_updation = async_handler ( async (req,res) => {
-// console.log(res.body)
-// })
+const drc_updation = async_handler(async (req, res) => {
+
+   const body = req.body
+   console.log(body)
+   const insertedLatex = await DrcData.insertMany(body, { ordered: false });
+   res.send(insertedLatex)
+})
+
 
 export default {
    admin_creating,
@@ -359,5 +362,5 @@ export default {
    add_driver_area,
    driver_supplier,
    supplier_latexdata,
-   // drc_updation
+   drc_updation
 }
