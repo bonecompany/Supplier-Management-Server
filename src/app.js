@@ -18,12 +18,12 @@ const app = express()
 // }))  
 // const cors = require('cors');
 
-app.use(
-  cors({
-    origin: 'https://supplier-management-client.vercel.app', 
-    credentials: true, 
-  })
-);
+// app.use(
+//   cors({
+//     origin: 'https://supplier-management-client.vercel.app', 
+//     credentials: true, 
+//   })
+// );
 
 app.use(cors())
 

@@ -88,7 +88,6 @@ const daily_latex_parchase = async_handler(async (req, res) => {
          }
 
          const admin = await Admin.find()
-         console.log("------------- breedc")
          console.log(admin[0]);
          const jars = parseInt(supplier.bigJarsCount) + parseInt(supplier.smallJarsCount);
          const createData = {
@@ -339,13 +338,99 @@ const supplier_latexdata = async_handler(async (req, res) => {
 // add drcupdation
 
 const drc_updation = async_handler(async (req, res) => {
+   const body = req.body;
+   console.log(body);
+   let insertedData = [];
+   let supplierDRCUpdates = [];
 
-   const body = req.body
-   console.log(body)
-   const insertedLatex = await DrcData.insertMany(body, { ordered: false });
-   res.send(insertedLatex)
-})
+   try {
+      for (let item of body) {
+         if (item.filWeight) {
 
+            const existingItem = await DrcData.findOne({ latexId: item.latexId });
+
+            if (!existingItem) {
+               const insertedLatex = await DrcData.create(item);
+               insertedData.push(insertedLatex);
+            } else {
+               return res.status(409).json(new ApiError(409, "Item with this latexId already exists and was not updated"));
+            }
+         }
+      }
+
+      for (const inserted of insertedData) {
+         supplierDRCUpdates.push({
+            updateOne: {
+               filter: { Bone_id: inserted.owner},
+               update: { $addToSet: { drcdata: inserted._id } }
+            }
+         });
+      }
+
+      if (supplierDRCUpdates.length > 0) {
+         await supplierModel.bulkWrite(supplierDRCUpdates);
+      }
+
+      return res.status(201).json(new ApiResponse(insertedData, 201, "DRC updated successfully"));
+
+   } catch (error) {
+      console.error("Error during DRC update: ", error);
+      return res.status(500).json(new ApiError(500, "server error"));
+   }
+});
+
+// get drc data retrival 
+
+const supplier_drcdata = async_handler(async (req, res) => {
+
+   const { supplierId, start, end } = req.query;
+
+   console.log(req.query)
+
+   let dates = {};
+
+   const startDate = start ? new Date(start) : null;
+
+   console.log(startDate)
+
+   const endDate = end ? new Date(end) : null;
+   console.log(endDate)
+
+   if (startDate && endDate) {
+      dates = {
+         date: {
+            $gte: startDate,
+            $lte: endDate,
+         },
+      };
+   } else if (startDate) {
+      dates = {
+         date: {
+            $gte: startDate,
+         },
+      };
+   } else if (endDate) {
+      dates = {
+         date: {
+            $lte: endDate,
+         },
+      };
+   }
+
+   console.log(supplierId, "----------------")
+
+   try {
+      const supplier = await supplierModel.findOne({ Bone_id: supplierId }).populate({
+         path: 'drcdata',
+         match: dates
+      });
+      console.log(supplier);
+      return res.status(200).json(new ApiResponse(supplier, 200, "Latex retrieval successful"));
+   } catch (error) {
+      console.error("Error retrieving latex: ", error);
+      return res.status(500).json(new ApiError(500, "Latex retrieval failed"));
+   }
+});
 
 export default {
    admin_creating,
@@ -362,5 +447,6 @@ export default {
    add_driver_area,
    driver_supplier,
    supplier_latexdata,
-   drc_updation
+   drc_updation,
+   supplier_drcdata
 }
