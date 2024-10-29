@@ -44,12 +44,12 @@ const supplier_schema = new Schema(
 
         isActive: { type: Boolean, default: true },
 
-        tappers: 
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Tappers"
-            },
-        
+        tappers:
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Tappers"
+        },
+
 
         drivers: [
             {
@@ -80,5 +80,8 @@ const supplier_schema = new Schema(
     { timestamps: true }
 
 )
+// supplier_schema.pre('findOne', function () {
+//     this.populate(['drcdata', 'tappers', 'drivers', 'latex', 'tappingData']);
+// });
 
 export const supplierModel = mongoose.model("Suppliers", supplier_schema)
