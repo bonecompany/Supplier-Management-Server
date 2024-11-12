@@ -16,6 +16,7 @@ router.delete("/supplier/delete/:id", adminController.deleteSupplier);
 router.get("/suppliers/latexdata",adminController.supplier_latexdata)
 router.post("/suppliers/drcupdation",adminController.drc_updation)
 router.get("/suppliers/drcdata",adminController.supplier_drcdata)
+router.post("/suppliers/billing",adminController.billing)
 
 
 // tapper controller by admin

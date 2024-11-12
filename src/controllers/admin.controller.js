@@ -9,6 +9,10 @@ import { latex } from "../models/latex.model.js";
 import { tappers } from "../models/tappers.model.js";
 import { drivers } from "../models/drivers.model.js";
 import { DrcData } from "../models/drcdata.model.js";
+import { Bill } from "../models/billingdata.model.js";
+import { createPdf } from "../services/billingPdf.js";
+import PDFDocument from 'pdfkit';  // PDF generation
+import { Readable } from 'stream';
 
 
 // create_admin-----------------------------------------
@@ -43,6 +47,7 @@ const admin_login = async_handler(async (req, res) => {
       adminToken
    });
 })
+
 
 
 // suppliers listing----------------------------------------
@@ -88,7 +93,6 @@ const daily_latex_parchase = async_handler(async (req, res) => {
          }
 
          const admin = await Admin.find()
-         console.log(admin[0]);
          const jars = parseInt(supplier.bigJarsCount) + parseInt(supplier.smallJarsCount);
          const createData = {
             owner: findSupplier._id,
@@ -284,20 +288,10 @@ const driver_supplier = async_handler(
 // get latex retrival data
 
 const supplier_latexdata = async_handler(async (req, res) => {
-
    const { supplierId, start, end } = req.query;
-
-   console.log(req.query)
-
    let dates = {};
-
    const startDate = start ? new Date(start) : null;
-
-   console.log(startDate)
-
    const endDate = end ? new Date(end) : null;
-   console.log(endDate)
-
    if (startDate && endDate) {
       dates = {
          date: {
@@ -318,23 +312,17 @@ const supplier_latexdata = async_handler(async (req, res) => {
          },
       };
    }
-
-   console.log(supplierId, "----------------")
-
    try {
       const supplier = await supplierModel.findOne({ Bone_id: supplierId }).populate({
          path: 'latex',
          match: dates
       });
-      console.log(supplier);
       return res.status(200).json(new ApiResponse(supplier, 200, "Latex retrieval successful"));
    } catch (error) {
       console.error("Error retrieving latex: ", error);
       return res.status(500).json(new ApiError(500, "Latex retrieval failed"));
    }
 });
-
-
 
 
 // add drcupdation
@@ -384,22 +372,10 @@ const drc_updation = async_handler(async (req, res) => {
 // get drc data retrival 
 
 const supplier_drcdata = async_handler(async (req, res) => {
-
-   console.log("this is from 388 ")
-
    const { supplierId, start, end } = req.query;
-
-   console.log(req.query)
-
    let dates = {};
-
    const startDate = start ? new Date(start) : null;
-
-   console.log(startDate)
-
    const endDate = end ? new Date(end) : null;
-   console.log(endDate)
-
    if (startDate && endDate) {
       dates = {
          date: {
@@ -431,11 +407,6 @@ const supplier_drcdata = async_handler(async (req, res) => {
            model: 'Latex'
          }
       });
-
-      console.log("----------------------------------------")
-      console.log(supplier)
-      console.log("----------------------------------------")
-      
       return res.status(200).json(new ApiResponse(supplier, 200, "Latex retrieval successful"));
    } catch (error) {
       console.error("Error retrieving latex: ", error);
@@ -443,8 +414,88 @@ const supplier_drcdata = async_handler(async (req, res) => {
    }
 });
 
+
+// billing  
+
+   // const billing = async_handler (async (req,res) => {
+   //    const body = req.body;  
+   //    const savedBills = [];
+   //    const supplierBillUpdate = []
+   //  try {
+   //      for (const billData of body) {
+   //          const newBill = new Bill(billData);
+   //          const savedBill = await newBill.save();  
+   //          savedBills.push(savedBill);  
+   //      }
+   //      savedBills.forEach((inserted) => {
+   //       supplierBillUpdate.push({
+   //          updateOne: {
+   //             filter: { _id: inserted.owner },
+   //             update: { $addToSet: {billingData: inserted._id} },
+   //          },
+   //       });
+   //    });
+   //    if (supplierBillUpdate.length > 0) {
+   //       await supplierModel.bulkWrite(supplierBillUpdate);
+   //    }
+
+   //    const pdfMiddleware = createPdf(savedBills)
+   //    const base64Pdf = pdfMiddleware.toString('base64');
+   //    res.status(201).json({
+   //       message: "All bills saved and PDF generated successfully",
+   //       savedBills,
+   //       pdf: base64Pdf, 
+   //     });
+   //  } catch (error) {
+   //      res.status(500).json({ message: "Error saving bills", error });
+   //  }
+   // });
+
+
+   const billing = async_handler(async (req, res) => {
+      const body = req.body;  
+      const savedBills = [];
+      const supplierBillUpdate = [];
+    
+
+        for (const billData of body) {
+          const newBill = new Bill(billData);
+          const savedBill = await newBill.save();
+          savedBills.push(savedBill);
+        }
+    
+
+        savedBills.forEach((inserted) => {
+          supplierBillUpdate.push({
+            updateOne: {
+              filter: { _id: inserted.owner },
+              update: { $addToSet: { billingData: inserted._id } },
+            },
+          });
+        });
+    
+        if (supplierBillUpdate.length > 0) {
+          await supplierModel.bulkWrite(supplierBillUpdate);
+        }
+    
+
+
+        // Generate the PDF
+
+        
+        const pdfBuffer = await createPdf(savedBills);
+        const base64Pdf = pdfBuffer.toString('base64');
+      
+        res.status(201).json({
+          message: "All bills saved and PDF generated successfully",
+          savedBills,
+          pdf: base64Pdf,
+        });
+      
+    });
+
 export default {
-   admin_creating,
+   admin_creating,   
    admin_login,
    supplier_listing,
    supplier_find,
@@ -459,5 +510,6 @@ export default {
    driver_supplier,
    supplier_latexdata,
    drc_updation,
-   supplier_drcdata
+   supplier_drcdata,
+   billing
 }
