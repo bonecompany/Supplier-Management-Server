@@ -5,7 +5,6 @@ class ApiError extends Error {
                 this.errors = Array.isArray(errors) ? errors : [errors];
                 this.statusCode = statusCode;
                 this.success = false
-
                 if (stack) {
                         this.stack = stack
                 } else {

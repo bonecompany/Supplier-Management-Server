@@ -74,6 +74,12 @@ const supplier_schema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: "TappingData"
             }
+        ],
+        billingData: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Bill"
+            }
         ]
 
     },
