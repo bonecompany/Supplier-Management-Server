@@ -11,8 +11,10 @@ import { drivers } from "../models/drivers.model.js";
 import { DrcData } from "../models/drcdata.model.js";
 import { Bill } from "../models/billingdata.model.js";
 import { createPdf } from "../services/billingPdf.js";
+import { Comment } from "../models/comment.js";
 import PDFDocument from 'pdfkit';  // PDF generation
 import { Readable } from 'stream';
+// import Suppliers from "../../../Supplier-Management-Client/src/pages/admin.pages/Suppliers.jsx";
 
 
 // create_admin-----------------------------------------
@@ -229,6 +231,38 @@ const driver_listing = async_handler(async (req, res) => {
 })
 
 
+
+// // create comment
+// const comment = async_handler(async (req,res) => {
+//    try {
+//       const {owner,text} = req.body
+//       const commentCreate = await Comment.create({
+//          text,
+//          owner
+//       });
+//       const update = await supplierModel.updateOne(
+//          { _id: owner }, { $push: { comment: commentCreate._id }}
+//       )
+//       return res.json(new ApiResponse(update, 201, "Success"));
+//    } catch (error) {
+//       const apiError = new ApiError(500, " Commenting Failed");
+//       return res.status(apiError.statusCode).json(apiError);
+//    }
+// })
+// // get comments
+// const commentList = async_handler(async (req,res) => {
+//    try {
+//       const {owner} = req.body
+//       const comments = await supplierModel.findOne({_id:owner}).populate("comment")
+//       return res.json(new ApiResponse(comments, 201, "Success"));
+//    } catch (error) {
+//       const apiError = new ApiError(500, " Commenting Failed");
+//       return res.status(apiError.statusCode).json(apiError);
+//    }
+// })
+
+
+
 // add drivers area 
 
 const add_driver_area = async_handler(async (req, res) => {
@@ -331,14 +365,11 @@ const drc_updation = async_handler(async (req, res) => {
    const { body } = req;
    const insertedData = [];
    const supplierDRCUpdates = [];
-
    try {
-
       const itemsWithFilWeight = body.filter(item => item.filWeight);
-
+      console.log(itemsWithFilWeight);
       for (let item of itemsWithFilWeight) {
          const existingItem = await DrcData.findOne({ latexId: item.latexId });
-
          if (!existingItem) {
             const newLatex = await DrcData.create(item);
             insertedData.push(newLatex);
@@ -346,7 +377,6 @@ const drc_updation = async_handler(async (req, res) => {
             return res.status(409).json(new ApiError(409, `Item with latexId ${item.latexId} already exists.`));
          }
       }
-
       insertedData.forEach((inserted) => {
          supplierDRCUpdates.push({
             updateOne: {
@@ -359,7 +389,7 @@ const drc_updation = async_handler(async (req, res) => {
       if (supplierDRCUpdates.length > 0) {
          await supplierModel.bulkWrite(supplierDRCUpdates);
       }
-
+      console.log(bodinsertedDatay);
       return res.status(201).json(new ApiResponse(insertedData, 201, "DRC updated successfully"));
    } catch (error) {
       console.error("Error during DRC update:", error);
@@ -368,14 +398,15 @@ const drc_updation = async_handler(async (req, res) => {
 });
 
 
-
 // get drc data retrival 
 
 const supplier_drcdata = async_handler(async (req, res) => {
+
    const { supplierId, start, end } = req.query;
    let dates = {};
    const startDate = start ? new Date(start) : null;
    const endDate = end ? new Date(end) : null;
+
    if (startDate && endDate) {
       dates = {
          date: {
@@ -399,15 +430,25 @@ const supplier_drcdata = async_handler(async (req, res) => {
 
    try {
 
+
       const supplier = await supplierModel.findOne({ Bone_id: supplierId }).populate({
          path: 'drcdata',
          match: dates,
          populate: {
-           path: 'latexId', 
-           model: 'Latex'
+            path: 'latexId',
+            model: 'Latex'
          }
       });
-      return res.status(200).json(new ApiResponse(supplier, 200, "Latex retrieval successful"));
+
+      if (supplier) {
+         return res.status(200).json(new ApiResponse(supplier, 200, "Latex retrieval successful"));
+      } else {
+         return res.status(404).json(new ApiError(404, "Supplier not found"));
+      }
+
+
+
+
    } catch (error) {
       console.error("Error retrieving latex: ", error);
       return res.status(500).json(new ApiError(500, "Latex retrieval failed"));
@@ -417,85 +458,97 @@ const supplier_drcdata = async_handler(async (req, res) => {
 
 // billing  
 
-   // const billing = async_handler (async (req,res) => {
-   //    const body = req.body;  
-   //    const savedBills = [];
-   //    const supplierBillUpdate = []
-   //  try {
-   //      for (const billData of body) {
-   //          const newBill = new Bill(billData);
-   //          const savedBill = await newBill.save();  
-   //          savedBills.push(savedBill);  
-   //      }
-   //      savedBills.forEach((inserted) => {
-   //       supplierBillUpdate.push({
-   //          updateOne: {
-   //             filter: { _id: inserted.owner },
-   //             update: { $addToSet: {billingData: inserted._id} },
-   //          },
-   //       });
-   //    });
-   //    if (supplierBillUpdate.length > 0) {
-   //       await supplierModel.bulkWrite(supplierBillUpdate);
-   //    }
+// const billing = async_handler (async (req,res) => {
+//    const body = req.body;  
+//    const savedBills = [];
+//    const supplierBillUpdate = []
+//  try {
+//      for (const billData of body) {
+//          const newBill = new Bill(billData);
+//          const savedBill = await newBill.save();  
+//          savedBills.push(savedBill);  
+//      }
+//      savedBills.forEach((inserted) => {
+//       supplierBillUpdate.push({
+//          updateOne: {
+//             filter: { _id: inserted.owner },
+//             update: { $addToSet: {billingData: inserted._id} },
+//          },
+//       });
+//    });
+//    if (supplierBillUpdate.length > 0) {
+//       await supplierModel.bulkWrite(supplierBillUpdate);
+//    }
 
-   //    const pdfMiddleware = createPdf(savedBills)
-   //    const base64Pdf = pdfMiddleware.toString('base64');
-   //    res.status(201).json({
-   //       message: "All bills saved and PDF generated successfully",
-   //       savedBills,
-   //       pdf: base64Pdf, 
-   //     });
-   //  } catch (error) {
-   //      res.status(500).json({ message: "Error saving bills", error });
-   //  }
-   // });
-
-
-   const billing = async_handler(async (req, res) => {
-      const body = req.body;  
-      const savedBills = [];
-      const supplierBillUpdate = [];
-    
-
-        for (const billData of body) {
-          const newBill = new Bill(billData);
-          const savedBill = await newBill.save();
-          savedBills.push(savedBill);
-        }
-    
-
-        savedBills.forEach((inserted) => {
-          supplierBillUpdate.push({
-            updateOne: {
-              filter: { _id: inserted.owner },
-              update: { $addToSet: { billingData: inserted._id } },
-            },
-          });
-        });
-    
-        if (supplierBillUpdate.length > 0) {
-          await supplierModel.bulkWrite(supplierBillUpdate);
-        }
-    
+//    const pdfMiddleware = createPdf(savedBills)
+//    const base64Pdf = pdfMiddleware.toString('base64');
+//    res.status(201).json({
+//       message: "All bills saved and PDF generated successfully",
+//       savedBills,
+//       pdf: base64Pdf, 
+//     });
+//  } catch (error) {
+//      res.status(500).json({ message: "Error saving bills", error });
+//  }
+// });
 
 
-        // Generate the PDF
+const billing = async_handler(async (req, res) => {
+   const body = req.body;
+   const savedBills = [];
+   const supplierBillUpdate = [];
 
-        
-        const pdfBuffer = await createPdf(savedBills);
-        const base64Pdf = pdfBuffer.toString('base64');
-      
-        res.status(201).json({
-          message: "All bills saved and PDF generated successfully",
-          savedBills,
-          pdf: base64Pdf,
-        });
-      
-    });
+
+   for (const billData of body) {
+      const newBill = new Bill(billData);
+      const savedBill = await newBill.save();
+      savedBills.push(savedBill);
+   }
+
+
+   savedBills.forEach((inserted) => {
+      supplierBillUpdate.push({
+         updateOne: {
+            filter: { _id: inserted.owner },
+            update: { $addToSet: { billingData: inserted._id } },
+         },
+      });
+   });
+
+   if (supplierBillUpdate.length > 0) {
+      await supplierModel.bulkWrite(supplierBillUpdate);
+   }
+   console.log("from billing");
+
+   // Generate the PDF
+
+
+   const pdfBuffer = await createPdf(savedBills);
+   const base64Pdf = pdfBuffer.toString('base64');
+
+   res.status(201).json({
+      message: "All bills saved and PDF generated successfully",
+      savedBills,
+      pdf: base64Pdf,
+   });
+
+});
+
+
+// billing data retrieve
+
+const billingData = async_handler(async (req, res) => {
+   const { supplierId } = req.query
+   const find = await supplierModel.findOne({ Bone_id: supplierId }).populate("billingData");
+
+   const { billingData } = find
+
+   return res.status(200).json(new ApiResponse(billingData, 200, "Bil retrieval successful"));
+})
+
 
 export default {
-   admin_creating,   
+   admin_creating,
    admin_login,
    supplier_listing,
    supplier_find,
@@ -511,5 +564,7 @@ export default {
    supplier_latexdata,
    drc_updation,
    supplier_drcdata,
-   billing
+   billing,
+   billingData
+
 }
