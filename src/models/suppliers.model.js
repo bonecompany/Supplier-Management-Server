@@ -80,6 +80,12 @@ const supplier_schema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: "Bill"
             }
+        ],
+        comment : [
+            {
+                type:Schema.Types.ObjectId,
+                ref:"comment"
+            }
         ]
 
     },

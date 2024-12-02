@@ -17,6 +17,11 @@ router.get("/suppliers/latexdata",adminController.supplier_latexdata)
 router.post("/suppliers/drcupdation",adminController.drc_updation)
 router.get("/suppliers/drcdata",adminController.supplier_drcdata)
 router.post("/suppliers/billing",adminController.billing)
+router.get("/suppliers/billing",adminController.billingData)
+
+// router.post("/suppliers/comment",adminController.comment)
+// router.get("/suppliers/comment",adminController.commentList)
+
 
 
 // tapper controller by admin
